@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${isEdit} ? '商品編集' : '商品追加'">商品管理 - ECショップ管理画面</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .admin-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+        }
+        .form-container {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+        .form-label {
+            font-weight: 600;
+            color: #495057;
+        }
+        .form-control {
+            border-radius: 10px;
+            border: 2px solid #e9ecef;
+            transition: all 0.3s ease;
+        }
+        .form-control:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        }
+        .btn-custom {
+            border-radius: 25px;
+            padding: 0.7rem 2rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+        .input-group-text {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-right: none;
+        }
+        .input-group .form-control {
+            border-left: none;
+        }
+        .preview-section {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-top: 1rem;
+        }
+        .character-counter {
+            font-size: 0.8rem;
+            color: #6c757d;
+            float: right;
+        }
+        .character-counter.warning {
+            color: #ffc107;
+        }
+        .character-counter.danger {
+            color: #dc3545;
+        }
+    </style>
+</head>
+<body>
+    <header class="admin-header">
+        <div class="container">
+            <h1 class="display-4">
+                <i th:class="${isEdit} ? 'fas fa-edit' : 'fas fa-plus'" class="me-3"></i>
+                <span th:text="${isEdit} ? '商品編集' : '商品追加'">商品管理</span>
+            </h1>
+            <p class="lead" th:text="${isEdit} ? '商品情報を更新してください' : '新しい商品を登録してください'"></p>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <!-- アラートメッセージ -->
+                <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
+                    <i class="fas fa-check-circle me-2"></i><span th:text="${success}"></span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+                
+                <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="fas fa-exclamation-circle me-2"></i><span th:text="${error}"></span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+
+                <div class="form-container">
+                    <form th:action="${isEdit} ? '/admin/products/edit/' + ${product.id} : '/admin/products/add'" 
+                          th:object="${product}" method="post" id="productForm">
+                        
+                        <!-- 商品名 -->
+                        <div class="mb-4">
+                            <label for="name" class="form-label">
+                                <i class="fas fa-tag me-2 text-primary"></i>商品名
+                                <span class="text-danger">*</span>
+                                <span class="character-counter" id="name-counter">0/100</span>
+                            </label>
+                            <input type="text" 
+                                   th:field="*{name}" 
+                                   class="form-control" 
+                                   id="name"
+                                   placeholder="商品名を入力してください"
+                                   required
+                                   maxlength="100"
+                                   oninput="updateCharacterCount('name', 100); updatePreview();">
+                            <div class="form-text">最大100文字まで入力できます</div>
+                        </div>
+
+                        <!-- 商品説明 -->
+                        <div class="mb-4">
+                            <label for="description" class="form-label">
+                                <i class="fas fa-align-left me-2 text-primary"></i>商品説明
+                                <span class="character-counter" id="description-counter">0/500</span>
+                            </label>
+                            <textarea th:field="*{description}" 
+                                      class="form-control" 
+                                      id="description"
+                                      rows="4"
+                                      placeholder="商品の詳細説明を入力してください"
+                                      maxlength="500"
+                                      oninput="updateCharacterCount('description', 500); updatePreview();"></textarea>
+                            <div class="form-text">最大500文字まで入力できます</div>
+                        </div>
+
+                        <!-- 価格 -->
+                        <div class="mb-4">
+                            <label for="price" class="form-label">
+                                <i class="fas fa-yen-sign me-2 text-primary"></i>価格
+                                <span class="text-danger">*</span>
+                            </label>
+                            <div class="input-group">
+                                <span class="input-group-text">¥</span>
+                                <input type="number" 
+                                       th:field="*{price}" 
+                                       class="form-control" 
+                                       id="price"
+                                       placeholder="0"
+                                       required
+                                       min="1"
+                                       max="9999999"
+                                       oninput="updatePreview();">
+                            </div>
+                            <div class="form-text">1円〜9,999,999円まで設定できます</div>
+                        </div>
+
+                        <!-- 在庫数 -->
+                        <div class="mb-4">
+                            <label for="stock" class="form-label">
+                                <i class="fas fa-boxes me-2 text-primary"></i>在庫数
+                                <span class="text-danger">*</span>
+                            </label>
+                            <div class="input-group">
+                                <input type="number" 
+                                       th:field="*{stock}" 
+                                       class="form-control" 
+                                       id="stock"
+                                       placeholder="0"
+                                       required
+                                       min="0"
+                                       max="99999"
+                                       oninput="updatePreview();">
+                                <span class="input-group-text">個</span>
+                            </div>
+                            <div class="form-text">0〜99,999個まで設定できます</div>
+                        </div>
+
+                        <!-- プレビューセクション -->
+                        <div class="preview-section">
+                            <h6 class="fw-bold mb-3">
+                                <i class="fas fa-eye me-2"></i>プレビュー
+                            </h6>
+                            <div class="card">
+                                <div class="card-header">
+                                    <h6 class="mb-0" id="preview-name">商品名</h6>
+                                </div>
+                                <div class="card-body">
+                                    <p class="card-text" id="preview-description">商品説明</p>
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <span class="badge bg-primary">価格</span>
+                                            <div class="fw-bold text-primary" id="preview-price">¥0</div>
+                                        </div>
+                                        <div class="col-6">
+                                            <span class="badge bg-info">在庫</span>
+                                            <div class="fw-bold" id="preview-stock">0個</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- ボタン -->
+                        <div class="d-flex justify-content-between mt-4">
+                            <a th:href="@{/admin/products}" class="btn btn-outline-secondary btn-custom">
+                                <i class="fas fa-arrow-left me-2"></i>戻る
+                            </a>
+                            <button type="submit" class="btn btn-primary btn-custom">
+                                <i th:class="${isEdit} ? 'fas fa-save' : 'fas fa-plus'" class="me-2"></i>
+                                <span th:text="${isEdit} ? '更新' : '登録'">登録</span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // プレビューを更新する関数
+        function updatePreview() {
+            const name = document.getElementById('name').value || '商品名';
+            const description = document.getElementById('description').value || '商品説明';
+            const price = document.getElementById('price').value || '0';
+            const stock = document.getElementById('stock').value || '0';
+
+            document.getElementById('preview-name').textContent = name;
+            document.getElementById('preview-description').textContent = description;
+            document.getElementById('preview-price').textContent = '¥' + Number(price).toLocaleString();
+            
+            const stockElement = document.getElementById('preview-stock');
+            const stockNumber = Number(stock);
+            stockElement.textContent = stockNumber.toLocaleString() + '個';
+            
+            // 在庫数に応じて色を変更
+            stockElement.className = 'fw-bold';
+            if (stockNumber <= 5) {
+                stockElement.classList.add('text-danger');
+            } else if (stockNumber <= 10) {
+                stockElement.classList.add('text-warning');
+            } else {
+                stockElement.classList.add('text-success');
+            }
+        }
+
+        // 文字数カウンターを更新する関数
+        function updateCharacterCount(fieldId, maxLength) {
+            const field = document.getElementById(fieldId);
+            const counter = document.getElementById(fieldId + '-counter');
+            const currentLength = field.value.length;
+            
+            counter.textContent = currentLength + '/' + maxLength;
+            
+            // 文字数に応じて色を変更
+            counter.className = 'character-counter';
+            if (currentLength >= maxLength * 0.9) {
+                counter.classList.add('danger');
+            } else if (currentLength >= maxLength * 0.7) {
+                counter.classList.add('warning');
+            }
+        }
+
+        // ページ読み込み時の初期化
+        document.addEventListener('DOMContentLoaded', function() {
+            // プレビューを初期化
+            updatePreview();
+            
+            // 文字数カウンターを初期化
+            updateCharacterCount('name', 100);
+            updateCharacterCount('description', 500);
+            
+            // フォーム送信時のバリデーション
+            document.getElementById('productForm').addEventListener('submit', function(e) {
+                const name = document.getElementById('name').value.trim();
+                const price = document.getElementById('price').value;
+                const stock = document.getElementById('stock').value;
+                
+                if (!name) {
+                    alert('商品名を入力してください。');
+                    e.preventDefault();
+                    return;
+                }
+                
+                if (!price || price < 1 || price > 9999999) {
+                    alert('価格は1円〜9,999,999円の範囲で入力してください。');
+                    e.preventDefault();
+                    return;
+                }
+                
+                if (!stock || stock < 0 || stock > 99999) {
+                    alert('在庫数は0〜99,999個の範囲で入力してください。');
+                    e.preventDefault();
+                    return;
+                }
+            });
+        });
+
+        // アラートの自動非表示
+        setTimeout(function() {
+            let alerts = document.querySelectorAll('.alert');
+            alerts.forEach(function(alert) {
+                let bsAlert = new bootstrap.Alert(alert);
+                bsAlert.close();
+            });
+        }, 5000);
+    </script>
+</body>
+</html>
