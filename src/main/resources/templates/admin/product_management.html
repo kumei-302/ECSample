@@ -112,10 +112,12 @@
                                class="btn btn-outline-primary btn-sm">
                                 <i class="fas fa-edit"></i> 編集
                             </a>
-                            <button type="button" class="btn btn-outline-danger btn-sm" 
-                                    th:onclick="'confirmDelete(' + ${product.id} + ', \'' + ${product.name} + '\')'">
-                                <i class="fas fa-trash"></i> 削除
-                            </button>
+							<button type="button" class="btn btn-outline-danger btn-sm"
+							        th:data-product-id="${product.id}"
+							        th:data-product-name="${product.name}"
+							        onclick="confirmDelete(this.dataset.productId, this.dataset.productName)">
+							    <i class="fas fa-trash"></i> 削除
+							</button>
                         </div>
                     </div>
                 </div>
