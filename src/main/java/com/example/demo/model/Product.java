@@ -1,5 +1,6 @@
 package com.example.demo.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -14,19 +15,23 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "products")
+@Table(name = "Product")
 public class Product {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "ProductId")
+    private Integer productId;
 
-    private String name;
+    @Column(name = "CategoryId")
+    private Integer categoryId;
 
-    private String description;
+    @Column(name = "ProductName")
+    private String productName;
 
-    private Integer price;
+    @Column(name = "ProductPrice")
+    private Integer productPrice;
 
-    private Integer stock;
-
+    @Column(name = "ProductStock")
+    private Integer productStock;
 }

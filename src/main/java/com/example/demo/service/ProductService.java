@@ -16,45 +16,43 @@ public class ProductService {
     @Autowired
     private ProductRepository productRepository;
 
-    /**
-     * 商品を保存する
-     */
+    //商品を保存する
     public Product save(Product product) {
         return productRepository.save(product);
     }
-
-    /**
-     * 商品名で重複チェック
-     */
-    public boolean existsByName(String name) {
-        return productRepository.findByName(name).isPresent();
+    
+    //商品名で重複チェック
+    public boolean existsByProductName(String ProductName) {
+        return productRepository.existsByProductName(ProductName);
     }
 
-    /**
-     * 全商品を取得
-     */
+    //全商品を取得
     public List<Product> getAll() {
         return productRepository.findAll();
     }
 
-    /**
-     * IDで商品を取得
-     */
-    public Optional<Product> findById(Long id) {
-        return productRepository.findById(id);
+    //IDで商品を取得
+    public Optional<Product> findByProductId(Integer ProductId) {
+        return productRepository.findById(ProductId);
     }
 
-    /**
-     * 商品を削除
-     */
-    public void deleteById(Long id) {
-        productRepository.deleteById(id);
+    //商品を削除
+    public void deleteByProductId(Integer ProductId) {
+        productRepository.deleteById(ProductId);
     }
 
-    /**
-     * 商品名で検索
-     */
-    public List<Product> searchByName(String keyword) {
-        return productRepository.findByNameContaining(keyword);
+    //商品名で検索
+    public List<Product> searchByProductName(String keyword) {
+        return productRepository.findByProductNameContaining(keyword);
+    }
+    
+    //価格範囲で検索
+    public List<Product> findByPriceRange(Integer minPrice, Integer maxPrice) {
+        return productRepository.findByProductPriceBetween(minPrice, maxPrice);
+    }
+    
+    //在庫があるかどうかで検索
+    public List<Product> findByStockGreaterThan(Integer ProductStock) {
+        return productRepository.findByProductStockGreaterThan(ProductStock);
     }
 }

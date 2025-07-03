@@ -1,6 +1,7 @@
 package com.example.demo.repository;
-//作成者　粂井
-
+/*作成者　粂井
+* 商品の検索
+*/
 import java.util.List;
 import java.util.Optional;
 
@@ -10,25 +11,20 @@ import org.springframework.stereotype.Repository;
 import com.example.demo.model.Product;
 
 @Repository
-public interface ProductRepository extends JpaRepository<Product, Long> {
+public interface ProductRepository extends JpaRepository<Product, Integer> {
     
-    /**
-     * 商品名で検索
-     */
-    Optional<Product> findByName(String name);
+    // 商品名で検索
+    Optional<Product> findByProductName(String ProductName);
     
-    /**
-     * 商品名に含まれる文字で検索
-     */
-    List<Product> findByNameContaining(String keyword);
+    // 商品名に含まれる文字で検索
+    List<Product> findByProductNameContaining(String keyword);
     
-    /**
-     * 価格範囲で検索
-     */
-    List<Product> findByPriceBetween(Integer minPrice, Integer maxPrice);
+    // 価格範囲で検索
+    List<Product> findByProductPriceBetween(Integer minPrice, Integer maxPrice);
     
-    /**
-     * 在庫があるかどうかで検索
-     */
-    List<Product> findByStockGreaterThan(Integer stock);
+    // 在庫があるかどうかで検索（修正：ProductStockに合わせて修正）
+    List<Product> findByProductStockGreaterThan(Integer ProductStock);
+    
+    // 商品名の存在チェック用
+    boolean existsByProductName(String ProductName);
 }
