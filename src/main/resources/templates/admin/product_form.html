@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${isEdit} ? '商品編集' : '商品追加'">商品フォーム - ECショップ管理画面</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .admin-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+        }
+        .form-card {
+            border: none;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+            border-radius: 10px;
+        }
+        .btn-custom {
+            border-radius: 20px;
+            padding: 0.5rem 2rem;
+        }
+        .form-floating label {
+            color: #6c757d;
+        }
+    </style>
+</head>
+<body>
+    <header class="admin-header">
+        <div class="container">
+            <h1 class="display-4">
+                <i class="fas fa-box me-3"></i>
+                <span th:text="${isEdit} ? '商品編集' : '商品追加'">商品フォーム</span>
+            </h1>
+            <p class="lead" th:text="${isEdit} ? '商品情報を編集します' : '新しい商品を追加します'">商品情報を入力してください</p>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- アラートメッセージ -->
+        <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="fas fa-check-circle me-2"></i><span th:text="${success}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        
+        <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="fas fa-exclamation-circle me-2"></i><span th:text="${error}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card form-card">
+                    <div class="card-body p-4">
+                        <form th:action="${isEdit} ? @{/admin/product/edit/{id}(id=${product.productId})} : @{/admin/product/add}" 
+                              th:object="${product}" method="post">
+                            
+                            <!-- カテゴリID -->
+                            <div class="form-floating mb-3">
+                                <select th:field="*{categoryId}" class="form-select" id="categoryId" required>
+                                    <option value="">カテゴリを選択してください</option>
+                                    <option value="1">ジャケット</option>
+                                    <option value="2">パンツ</option>
+                                    <option value="3">肌着</option>
+                                    <option value="4">装飾品</option>
+                                    <option value="5">その他</option>
+                                </select>
+                                <label for="categoryId">
+                                    <i class="fas fa-tags me-2"></i>カテゴリ
+                                </label>
+                            </div>
+
+                            <!-- 商品名 -->
+                            <div class="form-floating mb-3">
+                                <input type="text" th:field="*{productName}" class="form-control" 
+                                       id="productName" placeholder="商品名を入力" required maxlength="100">
+                                <label for="productName">
+                                    <i class="fas fa-box me-2"></i>商品名
+                                </label>
+                            </div>
+
+                            <!-- 価格 -->
+                            <div class="form-floating mb-3">
+                                <input type="number" th:field="*{productPrice}" class="form-control" 
+                                       id="productPrice" placeholder="価格を入力" required min="1" max="9999999">
+                                <label for="productPrice">
+                                    <i class="fas fa-yen-sign me-2"></i>価格（円）
+                                </label>
+                            </div>
+
+                            <!-- 在庫数 -->
+                            <div class="form-floating mb-4">
+                                <input type="number" th:field="*{productStock}" class="form-control" 
+                                       id="productStock" placeholder="在庫数を入力" required min="0" max="9999">
+                                <label for="productStock">
+                                    <i class="fas fa-warehouse me-2"></i>在庫数
+                                </label>
+                            </div>
+
+                            <!-- ボタン -->
+                            <div class="d-flex justify-content-between">
+                                <a th:href="@{/admin/product}" class="btn btn-outline-secondary btn-custom">
+                                    <i class="fas fa-arrow-left me-2"></i>戻る
+                                </a>
+                                <button type="submit" class="btn btn-primary btn-custom">
+                                    <i class="fas fa-save me-2"></i>
+                                    <span th:text="${isEdit} ? '更新' : '登録'">登録</span>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 入力ヒント -->
+        <div class="row justify-content-center mt-4">
+            <div class="col-lg-8">
+                <div class="card">
+                    <div class="card-body">
+                        <h6 class="card-title">
+                            <i class="fas fa-info-circle text-info me-2"></i>入力ヒント
+                        </h6>
+                        <ul class="mb-0 small text-muted">
+                            <li>商品名は100文字以内で入力してください</li>
+                            <li>価格は1円以上999万円以下で入力してください</li>
+                            <li>在庫数は0個以上9999個以下で入力してください</li>
+                            <li>同じ商品名は登録できません</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // アラートの自動非表示
+        setTimeout(function() {
+            let alerts = document.querySelectorAll('.alert');
+            alerts.forEach(function(alert) {
+                let bsAlert = new bootstrap.Alert(alert);
+                bsAlert.close();
+            });
+        }, 5000);
+
+        // フォームバリデーション
+        document.querySelector('form').addEventListener('submit', function(e) {
+            const productName = document.getElementById('productName').value.trim();
+            const productPrice = parseInt(document.getElementById('productPrice').value);
+            const productStock = parseInt(document.getElementById('productStock').value);
+
+            if (!productName) {
+                alert('商品名を入力してください。');
+                e.preventDefault();
+                return false;
+            }
+
+            if (!productPrice || productPrice < 1) {
+                alert('正しい価格を入力してください。');
+                e.preventDefault();
+                return false;
+            }
+
+            if (isNaN(productStock) || productStock < 0) {
+                alert('正しい在庫数を入力してください。');
+                e.preventDefault();
+                return false;
+            }
+        });
+    </script>
+</body>
+</html>

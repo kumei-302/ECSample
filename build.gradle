@@ -24,25 +24,27 @@ repositories {
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'//JDBC用JPAしか使わないなら無くても
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'//JPA用
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
 	compileOnly 'org.projectlombok:lombok'
-
+	
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	runtimeOnly 'org.postgresql:postgresql'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
-    testImplementation 'org.springframework.boot:spring-boot-testcontainers'
-    testImplementation 'org.testcontainers:junit-jupiter'
-    testImplementation 'org.testcontainers:postgresql'
+	
+	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.4'
+	
+	testImplementation 'org.testcontainers:junit-jupiter'//DBテスト用
+    testImplementation 'org.testcontainers:postgresql'//DBテスト用
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
-
 tasks.named('test') {
 	useJUnitPlatform()
 }

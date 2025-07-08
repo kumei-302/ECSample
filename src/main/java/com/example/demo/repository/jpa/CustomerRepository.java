@@ -1,4 +1,4 @@
-package com.example.demo.repository;
+package com.example.demo.repository.jpa;
 
 import java.util.Optional;
 
@@ -9,5 +9,5 @@ import com.example.demo.model.Customer;
 //作成者　粂井
 
 public interface CustomerRepository extends JpaRepository<Customer, Integer> {
-    Optional<Customer> findByEmail(String email); // 重複確認などで使う
+    Optional<Customer> findByCustomerEmail(String customerEmail); // 重複確認などで使う
 }

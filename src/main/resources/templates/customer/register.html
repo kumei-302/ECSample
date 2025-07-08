@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>顧客登録</title>
+</head>
+<body>
+    <h1>顧客登録</h1>
+    
+    <!-- エラーメッセージ表示 -->
+    <div th:if="${emailError}" style="color: red;">
+        <p th:text="${emailError}"></p>
+    </div>
+    <div th:if="${systemError}" style="color: red;">
+        <p th:text="${systemError}"></p>
+    </div>
+    
+    <form th:action="@{/customer/register}" th:object="${customerForm}" method="post">
+        <div>
+            <label>氏名：<input type="text" th:field="*{customerName}" /></label>
+            <span th:if="${#fields.hasErrors('customerName')}" th:errors="*{customerName}" style="color: red;"></span>
+        </div><br>
+        
+        <div>
+            <label>メール：<input type="email" th:field="*{customerEmail}" /></label>
+            <span th:if="${#fields.hasErrors('customerEmail')}" th:errors="*{customerEmail}" style="color: red;"></span>
+        </div><br>
+        
+        <div>
+            <label>住所：<input type="text" th:field="*{customerAddress}" /></label>
+            <span th:if="${#fields.hasErrors('customerAddress')}" th:errors="*{customerAddress}" style="color: red;"></span>
+        </div><br>
+        
+        <button type="submit">登録</button>
+    </form>
+</body>
+</html>
