@@ -19,6 +19,11 @@ ToDo一覧へ
 </div>
 <div sec:authorize="isAuthenticated()">
 認証されたユーザーにのみ表示
+<hr>
+<a sec:authorize="hasAuthority('ADMIN')" th:href="@{/admin/product}">
+管理画面へ
+</a>
+<br>
 </div>
 <br>
 <!-- ログアウト -->

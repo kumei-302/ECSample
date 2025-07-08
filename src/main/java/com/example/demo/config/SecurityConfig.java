@@ -1,15 +1,15 @@
 package com.example.demo.config;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.
-EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 import lombok.RequiredArgsConstructor;
+
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -28,6 +28,14 @@ public class SecurityConfig {
 	.requestMatchers("/login").permitAll()
 	// 【管理者権限設定】url:/adminに入ってるページは管理者しかアクセスできない
 	.requestMatchers("/admin/**").hasAuthority("ADMIN")
+	// 【削除権限設定】DELETEメソッドでの削除操作は管理者権限が必要
+	.requestMatchers(HttpMethod.DELETE, "/**").hasAuthority("ADMIN")
+	// 【削除権限設定】削除関連のURLパターン - 管理者が必要
+	.requestMatchers("/**/delete").hasAuthority("ADMIN")
+	.requestMatchers("/**/delete/**").hasAuthority("ADMIN")
+	// 【削除権限設定】特定のエンティティの削除は管理者権限が必要
+	.requestMatchers("/users/*/delete").hasAuthority("ADMIN")
+	.requestMatchers("/products/*/delete").hasAuthority("ADMIN")
 	// その他のリクエストは認証が必要
 	.anyRequest().authenticated())
 	// ★フォームベースのログイン設定
@@ -57,7 +65,7 @@ public class SecurityConfig {
 	);
 	return http.build();
 	}
-	}
+}
 //　このソースコードは、Spring Securityを使用してWebアプリケーションのセキュリティ設定
 //をカスタマイズするための設定クラスです。このクラスで、どのURLにアクセスするために認
 //証が必要か、ログイン処理の扱い方など、セキュリティ関連のカスタマイズを定義しています。
