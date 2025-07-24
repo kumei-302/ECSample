@@ -15,11 +15,8 @@ public class LoginUser extends User {
 * 実装クラスUserを作成する */
 public LoginUser(String username,
 String password,
-Collection<? extends GrantedAuthority> authorities, String displayname) {
+Collection<? extends GrantedAuthority> authorities) {
 super(username, password, authorities);
-}
-public String getDisplayname() {
-return displayname;
 }
 }
 //UserDetailsは、Spring Securityで使用されるインターフェースで、ユーザーの認証情報を表

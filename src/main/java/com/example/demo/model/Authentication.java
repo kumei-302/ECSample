@@ -1,5 +1,5 @@
 package com.example.demo.model;
-/*
+/*作成者粂井
  * 　認証情報用のエンティティクラス
  */
 
@@ -16,6 +16,4 @@ private String username;
 private String password;
 /** 権限 */
 private Role authority;
-/** 表示名 */
-private String displayname;
 }

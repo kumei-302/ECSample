@@ -1,5 +1,7 @@
 package com.example.demo.form;
-
+/*
+ * 作成者粂井ログイン時のバリデーションクラス
+ */
 import lombok.Data;
 @Data
 public class LoginForm {

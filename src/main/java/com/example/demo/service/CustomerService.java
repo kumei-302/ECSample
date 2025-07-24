@@ -11,7 +11,9 @@ import com.example.demo.form.CustomerForm;
 import com.example.demo.model.Customer;
 import com.example.demo.repository.jpa.CustomerRepository;
 
-//作成者　粂井
+/*作成者　粂井
+ * 顧客管理のサービスクラス
+ */
 
 @Service
 public class CustomerService {

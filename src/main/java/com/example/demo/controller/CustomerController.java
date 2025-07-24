@@ -14,7 +14,9 @@ import com.example.demo.exception.EmailAlreadyExistsException;
 import com.example.demo.form.CustomerForm;
 import com.example.demo.service.CustomerService;
 
-//作成者　粂井
+/*
+ * 作成者　粂井　顧客情報の管理を行うコントローラークラス
+ */
 
 @Controller
 public class CustomerController {

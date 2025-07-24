@@ -1,34 +1,43 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+      xmlns:sec="http://www.thymeleaf.org/extras/springsecurity6">
 <head>
-<title>メニュー</title>
+    <title>メニュー</title>
 </head>
 <body>
-<h2>メニュー画面</h2>
-<hr>
-<a sec:authorize="hasAuthority('ADMIN')" th:href="@{/todos}">
-ToDo一覧へ
-</a>
-<br>
-<div sec:authorize="hasAuthority('USER')">
-【一般権限で表示される部分】
-</div>
-<div sec:authentication="name">
-ログイン情報のname値に書き換わる
-</div>
-<div sec:authorize="isAuthenticated()">
-認証されたユーザーにのみ表示
-<hr>
-<a sec:authorize="hasAuthority('ADMIN')" th:href="@{/admin/product}">
-管理画面へ
-</a>
-<br>
-</div>
-<br>
-<!-- ログアウト -->
-<form th:action="@{/logout}" method="post">
-<input type="submit" value="ログアウト">
-</form>
+    <h2>メニュー画面</h2>
+    <hr>
+
+    <!-- ログインリンク（未認証ユーザー向け） -->
+    <a sec:authorize="isAnonymous()" th:href="@{/login}">
+        ログイン画面へ
+    </a>
+    <br>
+
+    <!-- 一般ユーザー向け -->
+    <div sec:authorize="hasAuthority('USER')">
+        【一般権限で表示される部分】
+    </div>
+
+    <!-- 認証済みユーザーの名前表示 -->
+    <div sec:authentication="name">
+        ログイン情報のname値に書き換わる
+    </div>
+
+    <!-- 認証済みユーザー用 -->
+    <div sec:authorize="isAuthenticated()">
+        認証されたユーザーにのみ表示
+        <hr>
+        <a sec:authorize="hasAuthority('ADMIN')" th:href="@{/admin/product}">
+            管理画面へ
+        </a>
+        <br>
+    </div>
+    <br>
+
+    <!-- ログアウトボタン -->
+    <form th:action="@{/logout}" method="post">
+        <input type="submit" value="ログアウト">
+    </form>
 </body>
 </html>

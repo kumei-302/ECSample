@@ -16,8 +16,7 @@ import com.example.demo.model.Role;
 import com.example.demo.repository.mybatis.AuthenticationMapper;
 
 import lombok.RequiredArgsConstructor;
-/**
- * 
+/*作成者粂井
 * カスタム認証サービス
 */
 @Service
@@ -36,8 +35,7 @@ if (authentication != null) {
 // UserDetailsの実装クラスを返す
 	return new LoginUser(authentication.getUsername(),
 			authentication.getPassword(),
-			getAuthorityList(authentication.getAuthority()),
-			authentication.getDisplayname()
+			getAuthorityList(authentication.getAuthority())
 			);
 } else {
 // 対象データが存在しない

@@ -1,8 +1,7 @@
 package com.example.demo.exception;
 
-/**
- * メールアドレス重複例外
- * 作成者　粂井
+/*
+ * 作成者　粂井メールアドレス重複例外を定義するクラス 
  */
 public class EmailAlreadyExistsException extends Exception {
     

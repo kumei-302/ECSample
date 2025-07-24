@@ -1,5 +1,7 @@
 package com.example.demo.config;
-
+/*
+ * 作成者粂井　パスワード設定を管理するクラス
+ */
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;

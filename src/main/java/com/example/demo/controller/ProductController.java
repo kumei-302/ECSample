@@ -1,9 +1,11 @@
 package com.example.demo.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-
+/*作成者粂井
+ * ユーザー用商品管理クラス　現在未使用
+ */
 @Controller
-@RequestMapping("/product")
+@RequestMapping("/products/product")
 public class ProductController {
 //
 //    @Autowired

@@ -1,5 +1,7 @@
 package com.example.demo.form;
-
+/*
+ * 作成者粂井顧客登録時のバリデーションクラス
+ */
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 

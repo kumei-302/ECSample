@@ -1,5 +1,7 @@
 package com.example.demo.controller;
-
+/*
+ * 作成者　粂井　ログイン管理のコントローラークラス
+ */
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

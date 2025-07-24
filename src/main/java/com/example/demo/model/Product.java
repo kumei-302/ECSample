@@ -1,5 +1,7 @@
 package com.example.demo.model;
-
+/*
+ * 作成者粂井商品情報のエンティティクラス
+ */
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

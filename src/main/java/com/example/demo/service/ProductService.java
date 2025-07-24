@@ -1,5 +1,7 @@
 package com.example.demo.service;
-//作成者　粂井
+/*作成者　粂井
+ * 所品管理のサービスクラス
+ */
 
 import java.util.List;
 import java.util.Optional;

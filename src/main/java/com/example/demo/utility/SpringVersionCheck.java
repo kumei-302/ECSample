@@ -1,6 +1,6 @@
 package com.example.demo.utility;
-/*バージョン確認用クラス
- * 
+/*　作成者粂井
+ * バージョン確認用クラス　確認用なので最終的には消す
  */
 import org.springframework.boot.SpringBootVersion;
 import org.springframework.core.SpringVersion;

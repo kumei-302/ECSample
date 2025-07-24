@@ -2,7 +2,7 @@ package com.example.demo.utility;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-/**
+/*作成者粂井
 * ハッシュ化した文字列を返すクラス
 */
 public class PasswordGenerator {

@@ -1,6 +1,6 @@
 package com.example.demo.repository.jpa;
 /*作成者　粂井
-* 商品の検索
+* 商品の検索などのrepositoryインターフェイス
 */
 import java.util.List;
 import java.util.Optional;

@@ -1,5 +1,7 @@
 package com.example.demo.model;
-
+/*作成者粂井
+ * 権限の情報を列挙型で管理するためのクラス
+ */
 public enum Role {
 ADMIN, USER
 }

@@ -9,7 +9,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 import lombok.RequiredArgsConstructor;
-
+/*
+ * 作成者粂井　セキュリティの権限の情報を管理するクラス
+ */
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -24,15 +26,25 @@ public class SecurityConfig {
 	http
 	// ★HTTPリクエストに対するセキュリティ設定
 	.authorizeHttpRequests(authz -> authz
-	// 「/login」へのアクセスは認証を必要としない
-	.requestMatchers("/login").permitAll()
+	// 【パブリック】ログイン不要でアクセス可能
+	.requestMatchers("/login", "/register", "/css/**", "/js/**", "/images/**").permitAll()
+	// 【商品閲覧】ログイン不要でアクセス可能
+	.requestMatchers("/", "/products", "/products/**", "/search", "/categories/**").permitAll()
+	// 【API - 商品取得】ログイン不要でアクセス可能
+	.requestMatchers(HttpMethod.GET, "/api/products/**").permitAll()
+			
+	// 【ユーザー機能】ログイン必須
+	.requestMatchers("/favorites/**", "/cart/**", "/orders/**", "/profile/**").authenticated()
+	// 【API - ユーザー機能】ログイン必須
+	.requestMatchers("/api/favorites/**", "/api/cart/**", "/api/orders/**").authenticated()
+			
 	// 【管理者権限設定】url:/adminに入ってるページは管理者しかアクセスできない
 	.requestMatchers("/admin/**").hasAuthority("ADMIN")
 	// 【削除権限設定】DELETEメソッドでの削除操作は管理者権限が必要
 	.requestMatchers(HttpMethod.DELETE, "/**").hasAuthority("ADMIN")
 	// 【削除権限設定】削除関連のURLパターン - 管理者が必要
-	.requestMatchers("/**/delete").hasAuthority("ADMIN")
-	.requestMatchers("/**/delete/**").hasAuthority("ADMIN")
+	.requestMatchers("/*/delete").hasAuthority("ADMIN")
+	.requestMatchers("/*/delete/*").hasAuthority("ADMIN")
 	// 【削除権限設定】特定のエンティティの削除は管理者権限が必要
 	.requestMatchers("/users/*/delete").hasAuthority("ADMIN")
 	.requestMatchers("/products/*/delete").hasAuthority("ADMIN")
